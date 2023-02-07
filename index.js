@@ -18,6 +18,31 @@ app.use(express.urlencoded({extended:true}));
 // follow the module instructions: destructure config environment variables from process.env
 // follow the docs:
   // define the config object
+  const { auth } = require('express-openid-connect');
+
+  const config = {
+    authRequired: true,
+    auth0Logout: true,
+    secret: 'a long, randomly-generated string stored in env',
+    baseURL: 'http://localhost:3000',
+    clientID: 'fIw8aikfpR7JFkgQtOSmHXze53P16ipz',
+    issuerBaseURL: 'https://dev-r5ooa1k2jsdwg2ir.uk.auth0.com'
+  };
+  
+  // auth router attaches /login, /logout, and /callback routes to the baseURL
+  app.use(auth(config));
+  
+  // req.isAuthenticated is provided from the auth router
+  app.get('/', (req, res) => {
+    res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+  });
+  
+
+
+
+
+
+
   // attach Auth0 OIDC auth router
   // create a GET / route handler that sends back Logged in or Logged out
 
